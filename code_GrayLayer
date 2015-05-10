@@ -1,0 +1,81 @@
+#include <opencv2/opencv.hpp>
+#include <string>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+
+int main()
+{
+	char k[100];
+	cout << "请输入图片路径" << endl;
+	cin.getline(k, 100);
+	Mat img1 = imread(k, 0);
+	if (img1.empty())
+	{
+		cout << "error" << endl;
+		return -1;
+	}
+	Mat img2(img1.rows, img1.cols, CV_8UC3);
+	for (int i = 0; i < img1.rows; i++)
+	{
+		for (int j = 0; j < img1.cols; j++)
+		{
+			int flag = floor(img1.at<uchar>(i, j) / 32);
+			if (flag == 0)//黑色
+			{
+				img2.at<Vec3b>(i, j)[0] = 0;
+				img2.at<Vec3b>(i, j)[1] = 0;
+				img2.at<Vec3b>(i, j)[2] = 0;
+			}
+			else if (flag == 1)//紫色
+			{
+				img2.at<Vec3b>(i, j)[0] = 255;
+				img2.at<Vec3b>(i, j)[1] = 0;
+				img2.at<Vec3b>(i, j)[2] = 255;
+			}
+			else if (flag == 2)//蓝色
+			{
+				img2.at<Vec3b>(i, j)[0] = 255;
+				img2.at<Vec3b>(i, j)[1] = 0;
+				img2.at<Vec3b>(i, j)[2] = 0;
+			}
+			else if (flag == 3)//青色
+			{
+				img2.at<Vec3b>(i, j)[0] = 255;
+				img2.at<Vec3b>(i, j)[1] = 255;
+				img2.at<Vec3b>(i, j)[2] = 0;
+			}
+			else if (flag == 4)//绿色
+			{
+				img2.at<Vec3b>(i, j)[0] = 0;
+				img2.at<Vec3b>(i, j)[1] = 255;
+				img2.at<Vec3b>(i, j)[2] = 0;
+			}
+			else if (flag == 5)//黄色
+			{
+				img2.at<Vec3b>(i, j)[0] = 0;
+				img2.at<Vec3b>(i, j)[1] = 255;
+				img2.at<Vec3b>(i, j)[2] = 255;
+			}
+			else if (flag == 6)//红色
+			{
+				img2.at<Vec3b>(i, j)[0] = 0;
+				img2.at<Vec3b>(i, j)[1] = 0;
+				img2.at<Vec3b>(i, j)[2] = 255;
+			}
+			else//白色
+			{
+				img2.at<Vec3b>(i, j)[0] = 255;
+				img2.at<Vec3b>(i, j)[1] = 255;
+				img2.at<Vec3b>(i, j)[2] = 255;
+			}
+		}
+	}
+	imwrite("F://pseudo color.tif", img2);
+	imshow("source image", img1);
+	imshow("pseudo color image", img2);
+	waitKey();
+	return 0;
+}
